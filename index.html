@@ -4,16 +4,35 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Calculator</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css" />
     <script src="main.js" defer></script>
   </head>
   <body>
     <div class="calculator">
-      <span
-        >Lorem ipsum dolor sit amet consectetur adipisicing elit. Id quam,
-        eligendi sint quasi iste est facere velit aliquid nihil a unde quae.
-        Quis ex iusto dignissimos, debitis saepe quo impedit.</span
-      >
+      <div class="display-container">
+        <input type="text" name="result" id="result">
+        <input type="text" name="expression" id="expression">
+      </div>
+      <div class="keypad">
+        <button type="button" data-value="all-clear">AC</button>
+        <button type="button" data-value="clear">C</button>
+        <button type="button" data-value="backspace">X</button>
+        <button type="button" data-value="equal">=</button>
+        <button type="button" data-value="+" class="operator">+</button>
+        <button type="button" data-value="-" class="operator">-</button>
+        <button type="button" data-value="*" class="operator">*</button>
+        <button type="button" data-value="/" class="operator">/</button>
+        <button type="button" data-value="0">0</button>
+        <button type="button" data-value="1">1</button>
+        <button type="button" data-value="2">2</button>
+        <button type="button" data-value="3">3</button>
+        <button type="button" data-value="4">4</button>
+        <button type="button" data-value="5">5</button>
+        <button type="button" data-value="6">6</button>
+        <button type="button" data-value="7">7</button>
+        <button type="button" data-value="8">8</button>
+        <button type="button" data-value="9">9</button>
+      </div>
     </div>
   </body>
 </html>
