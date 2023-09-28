@@ -1,21 +1,115 @@
 const keypad = document.querySelector(".keypad");
 const buttons = keypad.querySelectorAll("button");
 buttons.forEach((button) => {
-  button.addEventListener("click", () => {
-    changeCalcState(button);
+  button.addEventListener("click", (event) => {
+    const { target } = event;
+    const value = target.getAttribute("data-value");
+
+    if (!target.matches("button")) {
+      return;
+    }
+
+    switch (value) {
+      case "+":
+      case "-":
+      case "/":
+      case "*":
+      case "=":
+        handleOperator(value);
+        break;
+      case ".":
+        inputDecimal(value);
+        break;
+      case "all-clear":
+        resetCalculator();
+        break;
+      default:
+        if (Number.isInteger(parseFloat(value))) {
+          inputDigit(value);
+        }
+    }
+
+    updateResult();
   });
 });
 
 const calculatorState = {
-  firstOperand: "",
-  secondOperand: "",
-  operator: "",
+  firstOperand: null,
+  secondOperand: null,
+  operator: null,
+  waitingForSecondOperand: false,
   result: "",
   expression: "",
+  displayValue: "0",
 };
 
-function updateResult() {}
+function updateResult() {
+  const displayScreen = document.querySelector("#result");
+
+  displayScreen.value = calculatorState.displayValue;
+}
+
 function updateExpression() {}
+
+function inputDigit(digit) {
+  const { displayValue, waitingForSecondOperand, secondOperand } =
+    calculatorState;
+
+  if (waitingForSecondOperand) {
+    calculatorState.displayValue = digit;
+    calculatorState.waitingForSecondOperand = false;
+    // calculatorState.secondOperand = digit;
+  } else {
+    calculatorState.displayValue =
+      displayValue === "0" ? digit : displayValue + digit;
+  }
+  console.table(calculatorState);
+}
+
+function inputDecimal(dot) {
+  if (calculatorState.waitingForSecondOperand) {
+    calculatorState.displayValue = "0.";
+    calculatorState.waitingForSecondOperand = false;
+    return;
+  }
+
+  if (!calculatorState.displayValue.includes(dot)) {
+    calculatorState.displayValue += dot;
+  }
+}
+
+function handleOperator(nextOperator) {
+  const { firstOperand, displayValue, operator, waitingForSecondOperand } =
+    calculatorState;
+  const inputValue = parseFloat(displayValue);
+
+  if (operator && waitingForSecondOperand) {
+    calculatorState.operator = nextOperator;
+    console.table(calculatorState);
+    return;
+  }
+
+  if (firstOperand === null && !Number.isNaN(inputValue)) {
+    calculatorState.firstOperand = inputValue;
+  } else if (operator) {
+    const result = operate(firstOperand, operator, inputValue);
+
+    calculatorState.displayValue = `${parseFloat(result.toFixed(7))}`
+    calculatorState.firstOperand = result;
+  }
+
+  calculatorState.waitingForSecondOperand = true;
+  calculatorState.operator = nextOperator;
+  console.table(calculatorState);
+}
+
+function resetCalculator() {
+  calculatorState.displayValue = "0";
+  calculatorState.firstOperand = null;
+  calculatorState.waitingForSecondOperand = false;
+  calculatorState.operator = null;
+  console.table(calculatorState);
+}
 
 function add(a, b) {
   return a + b;
@@ -59,46 +153,4 @@ function operate(firstOperand, operator, secondOperand) {
   }
 
   return result;
-}
-
-function changeCalcState(button) {
-  const value = button.getAttribute("data-value");
-
-  if (button.classList.contains("digit")) {
-    if (!calculatorState.operator) {
-      calculatorState.firstOperand += value;
-    } else {
-      calculatorState.secondOperand += value;
-    }
-  } else if (button.classList.contains("operator")) {
-    if (
-      value === "=" &&
-      calculatorState.firstOperand &&
-      calculatorState.secondOperand
-    ) {
-      const firstOperand = Number(calculatorState.firstOperand);
-      const secondOperand = Number(calculatorState.secondOperand);
-      const operator = calculatorState.operator;
-      const result = operate(firstOperand, operator, secondOperand);
-      console.log(`${firstOperand} ${operator} ${secondOperand} = ${result}`);
-    } else if (
-      calculatorState.firstOperand &&
-      calculatorState.secondOperand &&
-      calculatorState.operator
-    ) {
-      const firstOperand = Number(calculatorState.firstOperand);
-      const secondOperand = Number(calculatorState.secondOperand);
-      const operator = calculatorState.operator;
-      const result = operate(firstOperand, operator, secondOperand);
-      console.log(`${firstOperand} ${operator} ${secondOperand} = ${result}`);
-    } else {
-      calculatorState.operator = value;
-    }
-    console.log("operator", value);
-  } else if (button.classList.contains("fnc")) {
-    console.log("function key", value);
-  } else {
-    return;
-  }
-  console.table(calculatorState);
 }
