@@ -49,20 +49,33 @@ function updateResult() {
   displayScreen.value = calculatorState.displayValue;
 }
 
-function updateExpression() {}
+function updateExpression() {
+
+}
 
 function inputDigit(digit) {
-  const { displayValue, waitingForSecondOperand, secondOperand } =
-    calculatorState;
+  const {
+    displayValue,
+    waitingForSecondOperand,
+    secondOperand,
+    operator,
+    firstOperand,
+  } = calculatorState;
 
   if (waitingForSecondOperand) {
     calculatorState.displayValue = digit;
     calculatorState.waitingForSecondOperand = false;
-    // calculatorState.secondOperand = digit;
   } else {
     calculatorState.displayValue =
       displayValue === "0" ? digit : displayValue + digit;
   }
+
+  if (operator && firstOperand) {
+    calculatorState.secondOperand = Number(calculatorState.displayValue);
+  } else {
+    calculatorState.firstOperand = Number(calculatorState.displayValue);
+  }
+
   console.table(calculatorState);
 }
 
@@ -94,7 +107,7 @@ function handleOperator(nextOperator) {
   } else if (operator) {
     const result = operate(firstOperand, operator, inputValue);
 
-    calculatorState.displayValue = `${parseFloat(result.toFixed(7))}`
+    calculatorState.displayValue = `${parseFloat(result.toFixed(8))}`;
     calculatorState.firstOperand = result;
   }
 
@@ -154,3 +167,5 @@ function operate(firstOperand, operator, secondOperand) {
 
   return result;
 }
+
+updateResult();
