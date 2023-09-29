@@ -70,7 +70,7 @@ function inputDigit(digit) {
       displayValue === "0" ? digit : displayValue + digit;
   }
 
-  if (operator && firstOperand) {
+  if (operator && firstOperand && waitingForSecondOperand) {
     calculatorState.secondOperand = Number(calculatorState.displayValue);
   } else {
     calculatorState.firstOperand = Number(calculatorState.displayValue);
@@ -161,6 +161,7 @@ function operate(firstOperand, operator, secondOperand) {
       result = divide(firstOperand, secondOperand);
       break;
     default:
+      result = secondOperand;
       console.table(firstOperand, operator, secondOperand);
       break;
   }
