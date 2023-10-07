@@ -32,12 +32,7 @@ buttons.forEach((button) => {
         }
     }
 
-    if (value === "=") {
-      // updateResult();
-      console.log("do something");
-    } else {
-      updateResult();
-    }
+    updateResult();
     console.table(calculatorState);
   });
 });
@@ -161,7 +156,6 @@ function handleEqual() {
     resetCalculator();
     calculatorState.displayedValue = String(result);
     calculatorState.firstOperand = result;
-    updateResult();
   } else {
     console.log("i am working");
     return;
