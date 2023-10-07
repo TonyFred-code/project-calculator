@@ -72,16 +72,18 @@ function inputDigit(digit) {
   }
 
   if (displayedValue === "0") {
+    console.log("line 75");
     calculatorState.displayedValue = digit;
   } else if (displayedValue === "-") {
     calculatorState.displayedValue = `-${digit}`;
   } else if (Number(displayedValue) === firstOperand && operator !== null) {
+    console.log("line 80")
     calculatorState.displayedValue = digit;
   } else {
     calculatorState.displayedValue = `${displayedValue}${digit}`;
   }
 
-  if (operator && firstOperand) {
+  if (operator && firstOperand !== null) {
     calculatorState.secondOperand = Number(calculatorState.displayedValue);
   } else {
     calculatorState.firstOperand = Number(calculatorState.displayedValue);
@@ -121,18 +123,19 @@ function handleOperator(nextOperator) {
     return;
   }
 
-  if (!firstOperand || displayedValue === "0") {
+  if (firstOperand === null) {
     console.log("i am working");
     return;
   }
 
-  if (firstOperand && operator && !secondOperand) {
+  if (firstOperand !== null && operator && secondOperand === null) {
     calculatorState.operator = nextOperator;
     calculatorState.waitingForSecondOperand = true;
+    console.log("that")
     return;
   }
 
-  if (firstOperand && operator && secondOperand) {
+  if (firstOperand !== null && operator && secondOperand !== null) {
     let result = operate(firstOperand, operator, secondOperand);
     resetCalculator();
     calculatorState.firstOperand = result;
@@ -142,9 +145,10 @@ function handleOperator(nextOperator) {
     return;
   }
 
-  if (firstOperand && !waitingForSecondOperand) {
+  if (firstOperand !== null && !waitingForSecondOperand) {
     calculatorState.operator = nextOperator;
     calculatorState.waitingForSecondOperand = true;
+    console.log("this")
   }
 }
 
@@ -152,7 +156,7 @@ function handleEqual() {
   let { firstOperand, operator, secondOperand, displayedValue } =
     calculatorState;
 
-  if (firstOperand && operator && secondOperand) {
+  if (firstOperand !== null && operator && secondOperand !== null) {
     let result = operate(firstOperand, operator, secondOperand);
     resetCalculator();
     calculatorState.displayedValue = String(result);
@@ -203,7 +207,7 @@ function operate(firstOperand, operator, secondOperand) {
       break;
     case "/":
       if (secondOperand === 0) {
-        console.error("SUCH ISN'T HAPPENING HERE!");
+       alert("division by zero is not tolerated");
         return;
       }
       result = divide(firstOperand, secondOperand);
