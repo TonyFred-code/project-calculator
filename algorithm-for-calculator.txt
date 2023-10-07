@@ -16,46 +16,17 @@
         - the zero "0" on screen should change to "0."
       1.4 the all-clear button
         - it should just reset as it ought to (similar to being discarded but save code if the check for calculator's state never happens
-      1.5 the backspace button
-        - same with the all-clear button in this context
-      1.6 the equals sign (=)
+      1.5 the equals sign (=)
         - zero or nothing should be displayed (given absence of a first operand)
 
------
-2 If the user clicks a digit upon loading, ( - initiating a first operand)
-    2.1 and then clicks another digit,
-       - update variable containing first operand to be a combination of the first clicked digit followed by newly clicked digit
-      --- clicks a digit (1) - (expression should show "1");
-      --- clicks another digit (2) - (expression should now show "12");
-       - value of the combination should be the new first operand.
-       - continue such process...limit digit length to about 11 or 12... (9,999,999,999,999)*
-       - update the expression displayed to the user using the value of the first operand.
-    2.2 and then clicks an operator,
-      - save first operand's value
-      - save clicked operator in a variable
-      - get set for input of second operand
-      --- clicks 1 - (expression "1")
-      --- clicks minus (-) - expression ("1 -"**  or "1-");
-      - update expression displayed to user to be a combination of first operand and operator.
-       2.2.1 clicks operator again
-         - replace stored operator with new operator
-         - update expression appropriately
-        --- clicks 1 (expression "1");
-        --- clicks plus ("+") - (expression "1 +");
-        --- clicks minus ("-") - (expression "1 -");
-       2.2.2 after presence of an operator and a first operand but no second operand
-         - clicks the
-    2.3 the decimal digit
-       - append decimal point if one isn't present already
-    2.4 all-clear button
-       - should reset calculator's state to default
-    2.5 backspace button
-       - should remove last clicked character from expression
-       - and update necessary variables
-       --- clicks 1 - expression ("1");
-           then --- clicks dot (.) - expression ("1.");
-            --- clicks backspace btn - expression ("1");
-           or --- clicks plus ("+") - expression ("1+");
-           --- clicks backspace btn - expression ("1");
-    2.6 equals sign
-        - display value of first operand in expression
+
+
+initiating a first operand and calculating a result
+  - clicking a digit (on page load);
+    -- then clicking an operator... (+, -, / or *)
+      -- the operator should be saved
+      -- the calculator should get set for input of second operand;
+  after a saved operator and a saved first operand...
+   -- clicking a digit should commence input of the second operand.
+    -- after presence of full or part of second operand
+     -- clicking the equal to sign should operate and display the value needed.

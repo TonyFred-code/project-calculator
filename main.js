@@ -26,9 +26,6 @@ buttons.forEach((button) => {
       case "all-clear":
         resetCalculator();
         break;
-      case "backspace":
-        handleBackspace();
-        break;
       default:
         if (Number.isInteger(parseFloat(value))) {
           inputDigit(value);
@@ -37,9 +34,9 @@ buttons.forEach((button) => {
 
     if (value === "=") {
       // updateResult();
-      console.log("do something")
+      console.log("do something");
     } else {
-      updateExpression();
+      updateResult();
     }
     console.table(calculatorState);
   });
@@ -50,190 +47,129 @@ const calculatorState = {
   secondOperand: null,
   operator: null,
   waitingForSecondOperand: false,
-  result: "",
-  expression: "0",
-  displayValue: "0",
-  clickedDigit: "0",
+  displayedValue: "0",
 };
 
 function updateResult() {
   const displayScreen = document.querySelector("#result");
 
-  displayScreen.value = calculatorState.result;
-}
 
-function updateExpression() {
-  let { firstOperand, secondOperand, expression, operator, clickedDigit } =
-    calculatorState;
-
-  if (clickedDigit === "-") {
-    calculatorState.expression = clickedDigit;
-  } else if (firstOperand && operator) {
-    calculatorState.expression = `${firstOperand} ${operator}`;
-  } else {
-    calculatorState.expression = clickedDigit;
-  }
-
-  const expressionScreen = document.querySelector("#expression");
-  expressionScreen.value = calculatorState.expression;
+  displayScreen.value = calculatorState.displayedValue;
 }
 
 function inputDigit(digit) {
   const {
-    expression,
     waitingForSecondOperand,
     secondOperand,
     operator,
     firstOperand,
-    clickedDigit,
+    displayedValue,
   } = calculatorState;
 
-  if (clickedDigit.length >= 13) {
+  if (displayedValue.length >= 13) {
     alert("This is a mini project, reduce my stress please... limit reached");
     return;
   }
 
-  if (clickedDigit === "0" || clickedDigit === "") {
-    calculatorState.clickedDigit = digit;
-  } else if (clickedDigit === "-") {
-    calculatorState.clickedDigit = `-${digit}`;
+  if (displayedValue === "0") {
+    calculatorState.displayedValue = digit;
+  } else if (displayedValue === "-") {
+    calculatorState.displayedValue = `-${digit}`;
+  } else if (Number(displayedValue) === firstOperand && operator !== null) {
+    calculatorState.displayedValue = digit;
   } else {
-    calculatorState.clickedDigit = `${clickedDigit}${digit}`;
+    calculatorState.displayedValue = `${displayedValue}${digit}`;
   }
 
-  if (operator && firstOperand && waitingForSecondOperand) {
-    calculatorState.secondOperand = Number(calculatorState.clickedDigit);
+  if (operator && firstOperand) {
+    calculatorState.secondOperand = Number(calculatorState.displayedValue);
   } else {
-    calculatorState.firstOperand = Number(calculatorState.clickedDigit);
+    calculatorState.firstOperand = Number(calculatorState.displayedValue);
   }
 }
 
 function inputDecimal(dot) {
-  if (calculatorState.waitingForSecondOperand) {
-    calculatorState.displayValue = "0.";
+  let { displayedValue, waitingForSecondOperand } = calculatorState;
+
+  if (waitingForSecondOperand) {
     calculatorState.waitingForSecondOperand = false;
+    calculatorState.displayedValue = "0.";
     return;
   }
 
-  if (
-    !calculatorState.expression.includes(dot) &&
-    !calculatorState.clickedDigit.includes(dot)
-  ) {
-    calculatorState.expression += dot;
-    calculatorState.clickedDigit += dot;
+  if (!displayedValue.includes(dot)) {
+    calculatorState.displayedValue += ".";
   }
 }
 
 function handleOperator(nextOperator) {
-  const {
+  let {
     firstOperand,
+    displayedValue,
     secondOperand,
-    displayValue,
     operator,
     waitingForSecondOperand,
-    clickedDigit,
   } = calculatorState;
-  // const inputValue = parseFloat(displayValue);
-  // calculatorState.clickedDigit = "0";
 
-  // if (operator && waitingForSecondOperand) {
-  //   calculatorState.operator = nextOperator;
-  //   calculatorState.expression = `${firstOperand} ${nextOperator} `
-  //   console.table(calculatorState);
-  //   return;
-  // }
-
-  // if (!waitingForSecondOperand) {
-  //   calculatorState.expression = `${firstOperand} ${nextOperator} `
-  //   console.log("something")
-  // } else if (secondOperand) {
-  //   calculatorState.expression += `${secondOperand}`;
-  // }
-
-  // if (firstOperand === null) {
-  //   calculatorState.firstOperand = inputValue;
-  // } else if (operator) {
-  //   const result = operate(firstOperand, operator, secondOperand);
-
-  //   calculatorState.displayValue = `${parseFloat(result.toFixed(8))}`;
-  //   calculatorState.firstOperand = result;
-  // }
-
-  // calculatorState.waitingForSecondOperand = true;
-  // calculatorState.operator = nextOperator;
-  // console.table(calculatorState);
-
-  if (firstOperand === null && nextOperator === "-") {
-    calculatorState.clickedDigit = "-";
-    calculatorState.expression = "-";
+  if (displayedValue === "-" && nextOperator !== "-") {
+    calculatorState.displayedValue = "0";
     return;
   }
 
-  if (clickedDigit === "-" && operator === null && nextOperator !== "-") {
-    calculatorState.clickedDigit = "0";
-    calculatorState.expression = "0";
+  if (nextOperator === "-" && firstOperand === null) {
+    calculatorState.displayedValue = "-";
     return;
   }
 
-  if (!firstOperand) {
-    return;
-  }
-
-  if (operator && waitingForSecondOperand) {
-    calculatorState.operator = nextOperator;
-    return;
-  }
-
-  if (firstOperand && operator === null) {
-    calculatorState.operator = nextOperator;
-    calculatorState.waitingForSecondOperand = true;
-    calculatorState.clickedDigit = "";
-  }
-}
-
-function handleEqual() {
-  let {firstOperand, secondOperand, expression, clickedDigit, result, operator, waitingForSecondOperand} = calculatorState;
-
-  if (firstOperand === null) {
-    return;
-  }
-
-  if (firstOperand && !operator) {
-    return;
-  } else if (waitingForSecondOperand) {
-    return;
-  }
-}
-
-function handleBackspace() {
-  let { firstOperand, clickedDigit, expression, secondOperand, operator} = calculatorState;
-  if (firstOperand === null || clickedDigit === "0") {
-    console.log("nothing done")
+  if (!firstOperand || displayedValue === "0") {
+    console.log("i am working");
     return;
   }
 
   if (firstOperand && operator && !secondOperand) {
-    calculatorState.operator = null;
-    calculatorState.expression = `${clickedDigit}`;
-  } else if (firstOperand && !operator) {
-    calculatorState.clickedDigit = clickedDigit.slice(0, -1);
-    if (calculatorState.clickedDigit === "") {
-      calculatorState.clickedDigit = "0";
-    }
+    calculatorState.operator = nextOperator;
+    calculatorState.waitingForSecondOperand = true;
+    return;
   }
 
+  if (firstOperand && operator && secondOperand) {
+    let result = operate(firstOperand, operator, secondOperand);
+    resetCalculator();
+    calculatorState.firstOperand = result;
+    calculatorState.displayedValue = String(result);
+    calculatorState.operator = nextOperator;
+    console.log("i am doing it")
+    return;
+  }
+
+  if (firstOperand && !waitingForSecondOperand) {
+    calculatorState.operator = nextOperator;
+    calculatorState.waitingForSecondOperand = true;
+  }
+}
+
+function handleEqual() {
+  let { firstOperand, operator, secondOperand, displayedValue } =
+    calculatorState;
+
+  if (firstOperand && operator && secondOperand) {
+    let result = operate(firstOperand, operator, secondOperand);
+    resetCalculator();
+    calculatorState.displayedValue = String(result);
+    calculatorState.firstOperand = result;
+    updateResult();
+  } else {
+    console.log("i am working");
+    return;
+  }
 }
 
 function resetCalculator() {
-  calculatorState.displayValue = "0";
+  calculatorState.displayedValue = "0";
   calculatorState.firstOperand = null;
-  calculatorState.waitingForSecondOperand = false;
-  calculatorState.operator = null;
-  calculatorState.expression = "0";
-  calculatorState.clickedDigit = "0";
   calculatorState.secondOperand = null;
-  calculatorState.result = ""
-  console.table(calculatorState);
+  calculatorState.operator = null;
+  calculatorState.waitingForSecondOperand = false;
 }
 
 function add(a, b) {
@@ -278,8 +214,7 @@ function operate(firstOperand, operator, secondOperand) {
       break;
   }
 
-  return result;
+  return Number(result.toFixed(12));
 }
 
-// updateResult();
-updateExpression();
+updateResult();
