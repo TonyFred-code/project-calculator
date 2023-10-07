@@ -86,9 +86,9 @@ function inputDigit(digit) {
 }
 
 function inputDecimal(dot) {
-  let { displayedValue, waitingForSecondOperand } = calculatorState;
+  let { displayedValue, waitingForSecondOperand, secondOperand } = calculatorState;
 
-  if (waitingForSecondOperand) {
+  if (waitingForSecondOperand && secondOperand === null ) {
     calculatorState.waitingForSecondOperand = false;
     calculatorState.displayedValue = "0.";
     return;
