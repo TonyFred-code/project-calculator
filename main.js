@@ -26,6 +26,9 @@ buttons.forEach((button) => {
       case "all-clear":
         resetCalculator();
         break;
+      case "backspace":
+        handleBackspace();
+        break;
       default:
         if (Number.isInteger(parseFloat(value))) {
           inputDigit(value);
@@ -169,6 +172,22 @@ function resetCalculator() {
   calculatorState.operator = null;
   calculatorState.waitingForSecondOperand = false;
 }
+
+function handleBackspace() {
+  const { displayedValue, secondOperand, firstOperand, operator } = calculatorState;
+
+  calculatorState.displayedValue = `${displayedValue.slice(0, -1)}`;
+  if (calculatorState.displayedValue === "") {
+    calculatorState.displayedValue = "0";
+  }
+
+  if (secondOperand === null) {
+    calculatorState.firstOperand = Number(calculatorState.displayedValue);
+  } else if (operator && firstOperand !== null) {
+    calculatorState.secondOperand = Number(calculatorState.displayedValue);
+  }
+}
+
 
 function add(a, b) {
   return a + b;

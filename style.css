@@ -67,7 +67,7 @@ button:hover {
   background-color: #f0595f;
   border-color: #b0353a;
   color: #fff;
-  grid-area: 1 / 1/ 2/ 3;
+  /* grid-area: 1 / 1/ 2/ 3; */
 }
 
 .all-clear:hover {
