@@ -17,6 +17,7 @@ const divideDigit = document.querySelector("[data-value='/']");
 const minusDigit = document.querySelector("[data-value='-']");
 const enterDigit = document.querySelector("[data-value='=']");
 const backspaceDigit = document.querySelector("[data-value='backspace']");
+const decimalPointDigit = document.querySelector("[data-value='.']");
 
 buttons.forEach((button) => {
   button.addEventListener("click", (event) => {
@@ -69,8 +70,7 @@ function updateResult() {
   const displayScreen = document.querySelector("#result");
   const { displayedValue } = calculatorState;
 
-  let value = Number(displayedValue);
-  displayScreen.value = value.toLocaleString();
+    displayScreen.value = displayedValue;
 }
 
 function inputDigit(digit) {
@@ -268,6 +268,9 @@ window.addEventListener(
         break;
       case "Enter":
         enterDigit.click();
+        break;
+      case ".":
+        decimalPointDigit.click();
         break;
 
       default:
