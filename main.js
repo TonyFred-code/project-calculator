@@ -52,29 +52,8 @@ function updateResult() {
   const displayScreen = document.querySelector("#result");
   const { displayedValue } = calculatorState;
 
-  if (displayedValue.length >= 4) {
-    let formattedDisplay = addPunctuation(displayedValue);
-    displayScreen.value = formattedDisplay;
-  } else {
-    displayScreen.value = calculatorState.displayedValue;
-  }
-}
-
-function addPunctuation(numberStr) {
-  let array = numberStr.split("");
-  let output = "";
-  let first = true;
-  for (let i = array.length - 1; i >= 0; i--) {
-    if ((array.length - i - 1) % 3 === 0) {
-      if (first) {
-        first = false;
-      } else {
-        output = "," + output;
-      }
-    }
-    output = array[i] + output;
-  }
-  return output;
+  let value = Number(displayedValue);
+  displayScreen.value = value.toLocaleString();
 }
 
 function inputDigit(digit) {
