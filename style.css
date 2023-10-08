@@ -21,10 +21,9 @@ html {
   width: 400px;
 }
 
-#result,
-#expression {
+#result{
   width: 100%;
-  font-size: 5rem;
+  font-size: 4.4rem;
   height: 80px;
   border: none;
   background-color: #252525;

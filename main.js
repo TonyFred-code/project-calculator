@@ -50,9 +50,31 @@ const calculatorState = {
 
 function updateResult() {
   const displayScreen = document.querySelector("#result");
+  const { displayedValue } = calculatorState;
 
+  if (displayedValue.length >= 4) {
+    let formattedDisplay = addPunctuation(displayedValue);
+    displayScreen.value = formattedDisplay;
+  } else {
+    displayScreen.value = calculatorState.displayedValue;
+  }
+}
 
-  displayScreen.value = calculatorState.displayedValue;
+function addPunctuation(numberStr) {
+  let array = numberStr.split("");
+  let output = "";
+  let first = true;
+  for (let i = array.length - 1; i >= 0; i--) {
+    if ((array.length - i - 1) % 3 === 0) {
+      if (first) {
+        first = false;
+      } else {
+        output = "," + output;
+      }
+    }
+    output = array[i] + output;
+  }
+  return output;
 }
 
 function inputDigit(digit) {
@@ -75,7 +97,7 @@ function inputDigit(digit) {
   } else if (displayedValue === "-") {
     calculatorState.displayedValue = `-${digit}`;
   } else if (Number(displayedValue) === firstOperand && operator !== null) {
-    console.log("line 80")
+    console.log("line 80");
     calculatorState.displayedValue = digit;
   } else {
     calculatorState.displayedValue = `${displayedValue}${digit}`;
@@ -89,9 +111,10 @@ function inputDigit(digit) {
 }
 
 function inputDecimal(dot) {
-  let { displayedValue, waitingForSecondOperand, secondOperand } = calculatorState;
+  let { displayedValue, waitingForSecondOperand, secondOperand } =
+    calculatorState;
 
-  if (waitingForSecondOperand && secondOperand === null ) {
+  if (waitingForSecondOperand && secondOperand === null) {
     calculatorState.waitingForSecondOperand = false;
     calculatorState.displayedValue = "0.";
     return;
@@ -129,7 +152,7 @@ function handleOperator(nextOperator) {
   if (firstOperand !== null && operator && secondOperand === null) {
     calculatorState.operator = nextOperator;
     calculatorState.waitingForSecondOperand = true;
-    console.log("that")
+    console.log("that");
     return;
   }
 
@@ -139,14 +162,14 @@ function handleOperator(nextOperator) {
     calculatorState.firstOperand = result;
     calculatorState.displayedValue = String(result);
     calculatorState.operator = nextOperator;
-    console.log("i am doing it")
+    console.log("i am doing it");
     return;
   }
 
   if (firstOperand !== null && !waitingForSecondOperand) {
     calculatorState.operator = nextOperator;
     calculatorState.waitingForSecondOperand = true;
-    console.log("this")
+    console.log("this");
   }
 }
 
@@ -174,7 +197,8 @@ function resetCalculator() {
 }
 
 function handleBackspace() {
-  const { displayedValue, secondOperand, firstOperand, operator } = calculatorState;
+  const { displayedValue, secondOperand, firstOperand, operator } =
+    calculatorState;
 
   calculatorState.displayedValue = `${displayedValue.slice(0, -1)}`;
   if (calculatorState.displayedValue === "") {
@@ -187,7 +211,6 @@ function handleBackspace() {
     calculatorState.secondOperand = Number(calculatorState.displayedValue);
   }
 }
-
 
 function add(a, b) {
   return a + b;
@@ -220,7 +243,7 @@ function operate(firstOperand, operator, secondOperand) {
       break;
     case "/":
       if (secondOperand === 0) {
-       alert("division by zero is not tolerated");
+        alert("division by zero is not tolerated");
         return;
       }
       result = divide(firstOperand, secondOperand);
