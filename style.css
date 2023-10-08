@@ -6,22 +6,43 @@
   box-sizing: inherit;
 }
 
+html, body {
+  height: 100%;
+  width: 100%;
+}
+
 html {
   font-size: 62.5%;
   box-sizing: border-box;
 }
 
-.calculator {
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 400px;
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-#result{
+.calculator {
+  border-radius: 5px;
+  width: 400px;
+  display: flex;
+  flex-flow: column nowrap;
+  gap: 16px;
+
+}
+
+.theme-switcher-name-container {
+  display: flex;
+  justify-content: space-between;
+  flex: 10%;
+}
+
+.display-container {
+  flex: 15%;
+
+}
+
+#result {
   width: 100%;
   font-size: 4.4rem;
   height: 80px;
@@ -29,8 +50,7 @@ html {
   background-color: #252525;
   color: #fff;
   text-align: right;
-  padding-right: 20px;
-  padding-left: 10px;
+  padding: 15px 10px;
 }
 
 button {
@@ -41,6 +61,7 @@ button {
   background-color: transparent;
   font-size: 2rem;
   color: #333;
+  text-align: center;
   background-image: linear-gradient(
     to bottom,
     transparent,
@@ -66,7 +87,7 @@ button:hover {
   background-color: #f0595f;
   border-color: #b0353a;
   color: #fff;
-  /* grid-area: 1 / 1/ 2/ 3; */
+  grid-area: 5 / 1 / 6 / 3;
 }
 
 .all-clear:hover {
@@ -84,25 +105,16 @@ button:hover {
   background-color: #4e9ed4;
 }
 
-.plus {
-  grid-area: 3 / 4 / 5 / 5;
-  text-align: center;
-  height: 100%;
-}
-
-.divide {
-  grid-area: 2/ 4/ 3/ 5;
-}
-
 .keypad {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 20px;
   padding: 20px;
+  flex: 75%;
 }
 
 @media screen and (max-width: 700px) {
-  body {
+  .calculator {
     width: 100%;
     height: 100%;
   }
