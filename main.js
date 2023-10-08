@@ -174,6 +174,11 @@ function handleEqual() {
     calculatorState;
 
   if (firstOperand !== null && operator && secondOperand !== null) {
+    if (operator === "/" && secondOperand === 0) {
+      resetCalculator();
+      alert("division by zero is not tolerated");
+      return;
+    }
     let result = operate(firstOperand, operator, secondOperand);
     resetCalculator();
     calculatorState.displayedValue = String(result);
@@ -307,7 +312,6 @@ function operate(firstOperand, operator, secondOperand) {
       break;
     case "/":
       if (secondOperand === 0) {
-        alert("division by zero is not tolerated");
         return;
       }
       result = divide(firstOperand, secondOperand);
