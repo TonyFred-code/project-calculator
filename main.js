@@ -1,6 +1,23 @@
 const keypad = document.querySelector(".keypad");
 const buttons = keypad.querySelectorAll("button");
 const expressionTab = document.querySelector("#expression");
+const digitOne = document.querySelector("[data-value='1']");
+const digitTwo = document.querySelector("[data-value='2']");
+const digitThree = document.querySelector("[data-value='3']");
+const digitFour = document.querySelector("[data-value='4']");
+const digitFive = document.querySelector("[data-value='5']");
+const digitSix = document.querySelector("[data-value='6']");
+const digitSeven = document.querySelector("[data-value='7']");
+const digitEight = document.querySelector("[data-value='8']");
+const digitNine = document.querySelector("[data-value='9']");
+const digitZero = document.querySelector("[data-value='0']");
+const plusDigit = document.querySelector("[data-value='+']");
+const multiplyDigit = document.querySelector("[data-value='*']");
+const divideDigit = document.querySelector("[data-value='/']");
+const minusDigit = document.querySelector("[data-value='-']");
+const enterDigit = document.querySelector("[data-value='=']")
+const backspaceDigit = document.querySelector("[data-value='backspace']")
+
 buttons.forEach((button) => {
   button.addEventListener("click", (event) => {
     const { target } = event;
@@ -190,6 +207,74 @@ function handleBackspace() {
     calculatorState.secondOperand = Number(calculatorState.displayedValue);
   }
 }
+
+window.addEventListener(
+  "keydown",
+  (event) => {
+    if (event.defaultPrevented) {
+      return; // Do nothing if the event was already processed
+    }
+
+    switch (event.key) {
+      case "1":
+        digitOne.click();
+        break;
+      case "2":
+        digitTwo.click();
+        break;
+      case "3":
+        digitThree.click();
+        break;
+      case "4":
+        digitFour.click();
+        break;
+      case "5":
+        digitFive.click();
+        break;
+      case "6":
+        digitSix.click();
+        break;
+      case "7":
+        digitSeven.click();
+        break;
+      case "8":
+        digitEight.click();
+        break;
+      case "9":
+        digitNine.click();
+        break;
+      case "0":
+        digitZero.click();
+        break;
+      case "+":
+        plusDigit.click();
+        break;
+      case "*":
+        multiplyDigit.click();
+        break;
+      case "/":
+        divideDigit.click();
+        break;
+      case "-":
+        minusDigit.click();
+        break;
+      case "Backspace":
+        backspaceDigit.click();
+        break;
+      case "Enter":
+        enterDigit.click();
+        break;
+
+      default:
+        console.log(event.key);
+        return; // Quit when this doesn't handle the key event.
+    }
+
+    // Cancel the default action to avoid it being handled twice
+    event.preventDefault();
+  },
+  true
+);
 
 function add(a, b) {
   return a + b;
