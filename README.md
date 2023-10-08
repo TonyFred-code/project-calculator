@@ -36,3 +36,4 @@ This project is open-source and available under the [MIT License](LICENSE).
 ## Acknowledgments
 - Thanks to The Odin Project for providing a great learning opportunity.
 - Special thanks to [Freshman Tech](https://github.com/Freshman-tech) for their excellent tutorial on building a calculator. You can find the tutorial [here](https://freshman.tech/calculator/) for the JavaScript aspect and [here](https://freshman.tech/css-grid-calculator/) for the CSS and HTML aspects.
+- Thanks to Frontend Mentor for their design which i use more and work towards perfecting
