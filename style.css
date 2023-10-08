@@ -27,20 +27,19 @@ body {
   width: 400px;
   display: flex;
   flex-flow: column nowrap;
-  gap: 16px;
+  /* gap: 16px; */
 
 }
 
-.theme-switcher-name-container {
+/* .theme-switcher-name-container {
   display: flex;
   justify-content: space-between;
   flex: 10%;
-}
+} */
 
-.display-container {
+/* .display-container {
   flex: 15%;
-
-}
+} */
 
 #result {
   width: 100%;
@@ -110,12 +109,12 @@ button:hover {
   grid-template-columns: repeat(4, 1fr);
   gap: 20px;
   padding: 20px;
-  flex: 75%;
+  /* flex: 75%; */
 }
 
-@media screen and (max-width: 700px) {
+/* @media screen and (max-width: 700px) {
   .calculator {
     width: 100%;
     height: 100%;
   }
-}
+} */
