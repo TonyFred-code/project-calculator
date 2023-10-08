@@ -15,8 +15,8 @@ const plusDigit = document.querySelector("[data-value='+']");
 const multiplyDigit = document.querySelector("[data-value='*']");
 const divideDigit = document.querySelector("[data-value='/']");
 const minusDigit = document.querySelector("[data-value='-']");
-const enterDigit = document.querySelector("[data-value='=']")
-const backspaceDigit = document.querySelector("[data-value='backspace']")
+const enterDigit = document.querySelector("[data-value='=']");
+const backspaceDigit = document.querySelector("[data-value='backspace']");
 
 buttons.forEach((button) => {
   button.addEventListener("click", (event) => {
@@ -281,40 +281,24 @@ window.addEventListener(
   true
 );
 
-function add(a, b) {
-  return a + b;
-}
-
-function subtract(a, b) {
-  return a - b;
-}
-
-function multiply(a, b) {
-  return a * b;
-}
-
-function divide(a, b) {
-  return a / b;
-}
-
 function operate(firstOperand, operator, secondOperand) {
   let result = 0;
   switch (operator) {
     case "+":
-      result = add(firstOperand, secondOperand);
+      result = firstOperand + secondOperand;
       break;
     case "*":
-      result = multiply(firstOperand, secondOperand);
+      result = firstOperand * secondOperand;
       break;
 
     case "-":
-      result = subtract(firstOperand, secondOperand);
+      result = firstOperand - secondOperand;
       break;
     case "/":
       if (secondOperand === 0) {
         return;
       }
-      result = divide(firstOperand, secondOperand);
+      result = firstOperand / secondOperand;
       break;
     default:
       result = secondOperand;
