@@ -1,6 +1,6 @@
-const keypad = document.querySelector(".keypad");
-const buttons = keypad.querySelectorAll("button");
-const expressionTab = document.querySelector("#expression");
+const keypad = document.querySelector('.keypad');
+const buttons = keypad.querySelectorAll('button');
+const expressionTab = document.querySelector('#expression');
 const digitOne = document.querySelector("[data-value='1']");
 const digitTwo = document.querySelector("[data-value='2']");
 const digitThree = document.querySelector("[data-value='3']");
@@ -20,31 +20,31 @@ const backspaceDigit = document.querySelector("[data-value='backspace']");
 const decimalPointDigit = document.querySelector("[data-value='.']");
 
 buttons.forEach((button) => {
-  button.addEventListener("click", (event) => {
+  button.addEventListener('click', (event) => {
     const { target } = event;
-    const value = target.getAttribute("data-value");
+    const value = target.getAttribute('data-value');
 
-    if (!target.matches("button")) {
+    if (!target.matches('button')) {
       return;
     }
 
     switch (value) {
-      case "+":
-      case "-":
-      case "/":
-      case "*":
+      case '+':
+      case '-':
+      case '/':
+      case '*':
         handleOperator(value);
         break;
-      case "=":
+      case '=':
         handleEqual();
         break;
-      case ".":
+      case '.':
         inputDecimal(value);
         break;
-      case "all-clear":
+      case 'all-clear':
         resetCalculator();
         break;
-      case "backspace":
+      case 'backspace':
         handleBackspace();
         break;
       default:
@@ -63,14 +63,14 @@ const calculatorState = {
   secondOperand: null,
   operator: null,
   waitingForSecondOperand: false,
-  displayedValue: "0",
+  displayedValue: '0',
 };
 
 function updateResult() {
-  const displayScreen = document.querySelector("#result");
+  const displayScreen = document.querySelector('#result');
   const { displayedValue } = calculatorState;
 
-    displayScreen.value = displayedValue;
+  displayScreen.value = displayedValue;
 }
 
 function inputDigit(digit) {
@@ -83,17 +83,20 @@ function inputDigit(digit) {
   } = calculatorState;
 
   if (displayedValue.length >= 13) {
-    alert("This is a mini project, reduce my stress please... limit reached");
+    alert('Value Limit reached');
     return;
   }
 
-  if (displayedValue === "0") {
-    console.log("line 75");
+  if (displayedValue === 'MATH ERROR') {
+    resetCalculator();
     calculatorState.displayedValue = digit;
-  } else if (displayedValue === "-") {
+  } else if (displayedValue === '0') {
+    console.log('line 75');
+    calculatorState.displayedValue = digit;
+  } else if (displayedValue === '-') {
     calculatorState.displayedValue = `-${digit}`;
   } else if (Number(displayedValue) === firstOperand && operator !== null) {
-    console.log("line 80");
+    console.log('line 80');
     calculatorState.displayedValue = digit;
   } else {
     calculatorState.displayedValue = `${displayedValue}${digit}`;
@@ -110,14 +113,18 @@ function inputDecimal(dot) {
   let { displayedValue, waitingForSecondOperand, secondOperand } =
     calculatorState;
 
+  if (displayedValue === 'MATH ERROR') {
+    resetCalculator();
+  }
+
   if (waitingForSecondOperand && secondOperand === null) {
     calculatorState.waitingForSecondOperand = false;
-    calculatorState.displayedValue = "0.";
+    calculatorState.displayedValue = '0.';
     return;
   }
 
   if (!displayedValue.includes(dot)) {
-    calculatorState.displayedValue += ".";
+    calculatorState.displayedValue += '.';
   }
 }
 
@@ -130,42 +137,47 @@ function handleOperator(nextOperator) {
     waitingForSecondOperand,
   } = calculatorState;
 
-  if (displayedValue === "-" && nextOperator !== "-") {
-    calculatorState.displayedValue = "0";
+  if (displayedValue === '-' && nextOperator !== '-') {
+    calculatorState.displayedValue = '0';
     return;
   }
 
-  if (nextOperator === "-" && firstOperand === null) {
-    calculatorState.displayedValue = "-";
+  if (nextOperator === '-' && firstOperand === null) {
+    calculatorState.displayedValue = '-';
     return;
   }
 
   if (firstOperand === null) {
-    console.log("i am working");
+    console.log('i am working');
     return;
   }
 
   if (firstOperand !== null && operator && secondOperand === null) {
     calculatorState.operator = nextOperator;
     calculatorState.waitingForSecondOperand = true;
-    console.log("that");
+    console.log('that');
     return;
   }
 
   if (firstOperand !== null && operator && secondOperand !== null) {
     let result = operate(firstOperand, operator, secondOperand);
+    if (result === 'MATH ERROR') {
+      resetCalculator();
+      calculatorState.displayedValue = String(result);
+      return;
+    }
     resetCalculator();
     calculatorState.firstOperand = result;
     calculatorState.displayedValue = String(result);
     calculatorState.operator = nextOperator;
-    console.log("i am doing it");
+    console.log('i am doing it');
     return;
   }
 
   if (firstOperand !== null && !waitingForSecondOperand) {
     calculatorState.operator = nextOperator;
     calculatorState.waitingForSecondOperand = true;
-    console.log("this");
+    console.log('this');
   }
 }
 
@@ -174,9 +186,10 @@ function handleEqual() {
     calculatorState;
 
   if (firstOperand !== null && operator && secondOperand !== null) {
-    if (operator === "/" && secondOperand === 0) {
+    if (operator === '/' && secondOperand === 0) {
       resetCalculator();
-      alert("division by zero is not tolerated");
+      alert('division by zero is not tolerated');
+      calculatorState.displayedValue = 'MATH ERROR';
       return;
     }
     let result = operate(firstOperand, operator, secondOperand);
@@ -184,13 +197,13 @@ function handleEqual() {
     calculatorState.displayedValue = String(result);
     calculatorState.firstOperand = result;
   } else {
-    console.log("i am working");
+    console.log('i am working');
     return;
   }
 }
 
 function resetCalculator() {
-  calculatorState.displayedValue = "0";
+  calculatorState.displayedValue = '0';
   calculatorState.firstOperand = null;
   calculatorState.secondOperand = null;
   calculatorState.operator = null;
@@ -201,9 +214,14 @@ function handleBackspace() {
   const { displayedValue, secondOperand, firstOperand, operator } =
     calculatorState;
 
+  if (displayedValue === 'MATH ERROR') {
+    resetCalculator();
+    return;
+  }
+
   calculatorState.displayedValue = `${displayedValue.slice(0, -1)}`;
-  if (calculatorState.displayedValue === "") {
-    calculatorState.displayedValue = "0";
+  if (calculatorState.displayedValue === '') {
+    calculatorState.displayedValue = '0';
   }
 
   if (secondOperand === null) {
@@ -214,62 +232,62 @@ function handleBackspace() {
 }
 
 window.addEventListener(
-  "keydown",
+  'keydown',
   (event) => {
     if (event.defaultPrevented) {
       return; // Do nothing if the event was already processed
     }
 
     switch (event.key) {
-      case "1":
+      case '1':
         digitOne.click();
         break;
-      case "2":
+      case '2':
         digitTwo.click();
         break;
-      case "3":
+      case '3':
         digitThree.click();
         break;
-      case "4":
+      case '4':
         digitFour.click();
         break;
-      case "5":
+      case '5':
         digitFive.click();
         break;
-      case "6":
+      case '6':
         digitSix.click();
         break;
-      case "7":
+      case '7':
         digitSeven.click();
         break;
-      case "8":
+      case '8':
         digitEight.click();
         break;
-      case "9":
+      case '9':
         digitNine.click();
         break;
-      case "0":
+      case '0':
         digitZero.click();
         break;
-      case "+":
+      case '+':
         plusDigit.click();
         break;
-      case "*":
+      case '*':
         multiplyDigit.click();
         break;
-      case "/":
+      case '/':
         divideDigit.click();
         break;
-      case "-":
+      case '-':
         minusDigit.click();
         break;
-      case "Backspace":
+      case 'Backspace':
         backspaceDigit.click();
         break;
-      case "Enter":
+      case 'Enter':
         enterDigit.click();
         break;
-      case ".":
+      case '.':
         decimalPointDigit.click();
         break;
 
@@ -287,19 +305,19 @@ window.addEventListener(
 function operate(firstOperand, operator, secondOperand) {
   let result = 0;
   switch (operator) {
-    case "+":
+    case '+':
       result = firstOperand + secondOperand;
       break;
-    case "*":
+    case '*':
       result = firstOperand * secondOperand;
       break;
 
-    case "-":
+    case '-':
       result = firstOperand - secondOperand;
       break;
-    case "/":
+    case '/':
       if (secondOperand === 0) {
-        return;
+        return `MATH ERROR`;
       }
       result = firstOperand / secondOperand;
       break;
